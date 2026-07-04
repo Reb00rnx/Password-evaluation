@@ -9,6 +9,9 @@ public record ResponseDto(
     StrengthScore strength,
     boolean meetsPolicy,
     boolean containsUsernameOrEmail ,
+    boolean containsSpecialCharacter,
+    boolean containsUpperCase,
+    boolean containsDigit,
     List<String> message,
     boolean isCommonPassword
 ){}

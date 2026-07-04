@@ -1,6 +1,7 @@
 package com.uniportal.passwordgym.Dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public record RequestDto(
 
@@ -9,5 +10,6 @@ public record RequestDto(
         @NotBlank(message = "Email cant be blank")
         String email,
         @NotBlank(message = "Password cant be blank")
+        @Size(max = 128, message = "Password must be at most 128 characters")
         String password
 ) {}

@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/password")
 public class PasswordGymController {
 
-    private PasswordGymService passwordGymService;
+    private final PasswordGymService passwordGymService;
 
     public PasswordGymController(PasswordGymService passwordGymService) {
         this.passwordGymService = passwordGymService;
     }
 
 
-    @PostMapping("/validation")
-    public ResponseEntity<ResponseDto> validate(@Valid @RequestBody RequestDto requestDto){
-        return  ResponseEntity.ok(passwordGymService.validatePassword(requestDto));
+    @PostMapping("/evalidation")
+    public ResponseEntity<ResponseDto> evaluate(@Valid @RequestBody RequestDto requestDto){
+        return  ResponseEntity.ok(passwordGymService.evaluate(requestDto));
     }
 }
