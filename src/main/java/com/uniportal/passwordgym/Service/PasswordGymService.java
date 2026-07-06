@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 @Service
 public class PasswordGymService {
 
+    private static final int MIN_IDENTITY_MATCH_LENGTH = 3;
+
     private final Set<String> commonPasswords;
     private final int minLength;
     private final int midLength;
@@ -48,7 +50,7 @@ public class PasswordGymService {
 
         if (password.length() < minLength) {
             meetsPolicy = false;
-            messages.add("Password must be at least 10 characters long");
+            messages.add("Password must be at least " + minLength + " characters long");
         }
         if (upperCase) {
             score += 1;
@@ -157,8 +159,13 @@ public class PasswordGymService {
     }
 
     private boolean containsUsernameOrEmail(String password, String username, String email) {
-        boolean containsUsername = password.toLowerCase().contains(username.toLowerCase());
-        boolean containsEmail = password.toLowerCase().contains(email.split("@")[0].toLowerCase());
+        String emailLocalPart = email.split("@")[0];
+        String lowerPassword = password.toLowerCase();
+
+        boolean containsUsername = username.length() >= MIN_IDENTITY_MATCH_LENGTH
+                && lowerPassword.contains(username.toLowerCase());
+        boolean containsEmail = emailLocalPart.length() >= MIN_IDENTITY_MATCH_LENGTH
+                && lowerPassword.contains(emailLocalPart.toLowerCase());
 
         return containsEmail || containsUsername;
     }

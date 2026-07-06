@@ -259,4 +259,16 @@ class PasswordGymServiceTest {
         assertFalse(response.meetsPolicy());
         assertTrue(response.containsUsernameOrEmail());
     }
+
+    @Test
+    void shortUsernameShouldNotCauseFalsePositiveIdentityMatch() {
+        // given:
+        RequestDto request = new RequestDto("jo", "jo@example.com", "ConjoinedPass1");
+
+        // when
+        ResponseDto response = passwordGymService.evaluate(request);
+
+        // then
+        assertFalse(response.containsUsernameOrEmail());
+    }
 }
