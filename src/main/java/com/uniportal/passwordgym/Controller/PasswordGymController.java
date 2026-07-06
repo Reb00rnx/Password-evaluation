@@ -21,7 +21,7 @@ public class PasswordGymController {
     }
 
 
-    @PostMapping("/evalidation")
+    @PostMapping("/evaluate")
     public ResponseEntity<ResponseDto> evaluate(@Valid @RequestBody RequestDto requestDto){
         return  ResponseEntity.ok(passwordGymService.evaluate(requestDto));
     }

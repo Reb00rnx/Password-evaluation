@@ -3,6 +3,7 @@ package com.uniportal.passwordgym.Service;
 import com.uniportal.passwordgym.Dto.RequestDto;
 import com.uniportal.passwordgym.Dto.ResponseDto;
 import com.uniportal.passwordgym.Enum.StrengthScore;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -15,7 +16,20 @@ import java.util.stream.Collectors;
 @Service
 public class PasswordGymService {
 
-    private final Set<String> commonPasswords = loadCommonPasswords();
+    private final Set<String> commonPasswords;
+    private final int minLength;
+    private final int midLength;
+    private final int longLength;
+
+    public PasswordGymService(
+            @Value("${password.policy.min-length}") int minLength,
+            @Value("${password.policy.mid-length}") int midLength,
+            @Value("${password.policy.long-length}") int longLength) {
+        this.minLength = minLength;
+        this.midLength = midLength;
+        this.longLength = longLength;
+        this.commonPasswords = loadCommonPasswords();
+    }
 
     public ResponseDto evaluate(RequestDto requestDto) {
         String password = requestDto.password();
@@ -32,7 +46,7 @@ public class PasswordGymService {
         boolean specialCharacter = containsSpecialChar(password);
 
 
-        if (password.length() < 10) {
+        if (password.length() < minLength) {
             meetsPolicy = false;
             messages.add("Password must be at least 10 characters long");
         }
@@ -74,7 +88,7 @@ public class PasswordGymService {
 
         StrengthScore strength;
 
-        if (password.length() < 10) {
+        if (password.length() < minLength) {
             strength = StrengthScore.VERY_WEAK;
         } else if (!meetsPolicy) {
             strength = StrengthScore.WEAK;
@@ -120,13 +134,13 @@ public class PasswordGymService {
     private int scoreLength(String password) {
         int score = 0;
 
-        if (password.length() >= 10) {
+        if (password.length() >= minLength) {
             score = 5;
         }
-        if (password.length() >= 12) {
+        if (password.length() >= midLength) {
             score = 8;
         }
-        if (password.length() >= 16) {
+        if (password.length() >= longLength) {
             score = 10;
         }
 
@@ -173,9 +187,13 @@ public class PasswordGymService {
     }
 
     private static Set<String> loadCommonPasswords() {
-        InputStream is = PasswordGymService.class.getResourceAsStream("/top_most_used.txt");
+        return loadCommonPasswords("/top_most_used.txt");
+    }
+
+    static Set<String> loadCommonPasswords(String resourcePath) {
+        InputStream is = PasswordGymService.class.getResourceAsStream(resourcePath);
         if (is == null) {
-            throw new IllegalStateException("Common passwords file not found on classpath: /top_most_used.txt");
+            throw new IllegalStateException("Common passwords file not found on classpath: " + resourcePath);
         }
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {

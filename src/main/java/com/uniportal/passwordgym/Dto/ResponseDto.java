@@ -8,7 +8,7 @@ public record ResponseDto(
     int score,
     StrengthScore strength,
     boolean meetsPolicy,
-    boolean containsUsernameOrEmail ,
+    boolean containsUsernameOrEmail,
     boolean containsSpecialCharacter,
     boolean containsUpperCase,
     boolean containsDigit,
