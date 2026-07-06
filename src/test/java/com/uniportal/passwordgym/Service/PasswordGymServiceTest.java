@@ -121,6 +121,18 @@ class PasswordGymServiceTest {
     }
 
     @Test
+    void mixedSequentialThenRepeatShouldNotCountAsThreeRun() {
+        // given:
+        RequestDto request = requestWithPassword("Hulkbuster3100!");
+
+        // when
+        ResponseDto response = passwordGymService.evaluate(request);
+
+        // then
+        assertTrue(response.meetsPolicy());
+    }
+
+    @Test
     void passwordWithFullCompositionShouldGetBonusFlags() {
         // given
         RequestDto request = requestWithPassword("Tr7$mQ9!Zx");

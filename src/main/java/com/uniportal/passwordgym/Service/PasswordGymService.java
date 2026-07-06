@@ -172,21 +172,35 @@ public class PasswordGymService {
 
     private boolean hasSequentialOrRepeatedChars(String password) {
         int runLength = 1;
+        int direction = 0;
 
         for (int i = 1; i < password.length(); i++) {
             char prev = password.charAt(i - 1);
             char curr = password.charAt(i);
 
-            boolean isRepeat = curr == prev;
-            boolean isSequential = curr == prev + 1 || curr == prev - 1;
-
-            if (isRepeat || isSequential) {
-                runLength++;
-                if (runLength >= 3) {
-                    return true;
-                }
+            int currentDirection;
+            if (curr == prev) {
+                currentDirection = 2;
+            } else if (curr == prev + 1) {
+                currentDirection = 1;
+            } else if (curr == prev - 1) {
+                currentDirection = -1;
             } else {
+                currentDirection = 0;
+            }
+
+            if (currentDirection != 0 && currentDirection == direction) {
+                runLength++;
+            } else if (currentDirection != 0) {
+                direction = currentDirection;
+                runLength = 2;
+            } else {
+                direction = 0;
                 runLength = 1;
+            }
+
+            if (runLength >= 3) {
+                return true;
             }
         }
 
