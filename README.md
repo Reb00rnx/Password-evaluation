@@ -101,8 +101,6 @@ Not implemented here, but worth naming given the regulated-industry (HIPAA/FedRA
 
 - **Audit logging** - if integrated into a larger system, evaluation attempts (never the password itself) would need to be logged to satisfy HIPAA-style audit trail requirements.
 - **Dependency vulnerability scanning** (e.g. OWASP Dependency-Check, Snyk) as part of the build pipeline.
-- **CORS configuration** - if a browser-based frontend on a different origin consumes this API, it needs an explicit allow-list, never a wildcard origin.
-- **Observability beyond `/actuator/health`** - e.g. Micrometer metrics on evaluation outcomes, to see strength-distribution trends in production rather than just service liveness.
 
 ## Known limitations
 
